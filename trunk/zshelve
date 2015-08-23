@@ -1,0 +1,104 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+'''commandline tool for zshelve databases
+
+Usage: zshelve  FILE  dump                    Dump the data tree
+       zshelve  FILE  keys                    List of keys
+       zshelve  FILE  get          KEY        Dump value for key 
+       zshelve  FILE  set          KEY VALUE  Set db[key] = value
+       zshelve  FILE  has_key      KEY        True if database has the key
+       zshelve  FILE  search_key   KEY        Search key
+       zshelve  FILE  search_value VALUE      Search value
+'''
+
+"""
+Example:
+
+$ zshelve set tes.db a 1
+$ zshelve dump tes.db
+    |- a
+    |    |- 1
+$ zshelve set tes.db b "dict(a=1,b=2,c=3,d={'s':'4'})"
+$ zshelve dump tes.db
+    |- a
+    |    |- 1
+    |- b
+    |    |- a
+    |    |    |- 1
+    |    |- c
+    |    |    |- 3
+    |    |- b
+    |    |    |- 2
+    |    |- d
+    |    |    |- s
+    |    |    |    |- 4
+"""
+import zshelve
+
+def _dumpTree(t, level=0, indent='    |'):
+    ## 显示 tree
+    level += 1
+    try:
+        for i in t.items():
+            print indent*level+'-', i[0]
+            try:
+                _dumpTree(i[1], level)
+            except:
+                print indent*level+'-', i[1]
+    except:
+        if hasattr(t, '__iter__'):
+            for i in t:
+                print indent*level+'-',i
+        else:
+            print indent*level+'-', t
+
+def main():
+    '''main'''
+    import sys
+    import os
+    try:
+        cmd = sys.argv[2]
+        fname = sys.argv[1]
+        try:
+            db = zshelve.btopen(fname)
+        except:
+            db = zshelve.open(fname)
+        if cmd == "dump":
+            _dumpTree(db)
+        elif cmd == "keys":
+            for i in db:
+                print i
+        elif cmd == "get":
+            key = sys.argv[3]
+            _dumpTree(db[key])
+        elif cmd == "set":
+            key = sys.argv[3]
+            try:
+                value = eval(' '.join(sys.argv[4:]))
+            except:
+                value = ' '.join(sys.argv[4:])
+            db[key] = value
+        elif cmd == "has_key":
+            key = sys.argv[3]
+            if key in db:
+                print True
+            else:
+                print False
+                sys.exit(1)
+        elif cmd == "search_key":
+            key = sys.argv[3]
+            for i in db:
+                if key in i:
+                    print i
+        elif cmd == "search_value":
+            value = sys.argv[3]
+            for i,t in db.iteritems():
+                if value in t:
+                    print i
+                    _dumpTree(t)
+    except:
+        print __doc__
+    
+    
+if __name__=="__main__":
+    main()

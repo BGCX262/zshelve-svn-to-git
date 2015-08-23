@@ -1,0 +1,10 @@
+
+= Install =
+{{{
+svn checkout http://zshelve.googlecode.com/svn/trunk/ zshelve
+cd zshelve
+sudo python setup.py install
+}}}
+
+= Usage =
+[Usage InProgram]  [commandline InCommandline]

@@ -1,0 +1,32 @@
+= Example: =
+{{{
+huahua@huahua:tmp$ zshelve 
+commandline tool for zshelve databases
+
+Usage: zshelve  FILE  dump                    Dump the data tree
+       zshelve  FILE  keys                    List of keys
+       zshelve  FILE  get          KEY        Dump value for key 
+       zshelve  FILE  set          KEY VALUE  Set db[key] = value
+       zshelve  FILE  has_key      KEY        True if database has the key
+       zshelve  FILE  search_key   KEY        Search key
+       zshelve  FILE  search_value VALUE      Search value
+
+huahua@huahua:tmp$ zshelve tes.db set a 1
+huahua@huahua:tmp$ zshelve tes.db dump
+    |- a
+    |    |- 1
+huahua@huahua:tmp$ zshelve tes.db set b "dict(a=1,b=2,c=3,d={'s':'4'})"
+huahua@huahua:tmp$ zshelve tes.db dump
+    |- a
+    |    |- 1
+    |- b
+    |    |- a
+    |    |    |- 1
+    |    |- c
+    |    |    |- 3
+    |    |- b
+    |    |    |- 2
+    |    |- d
+    |    |    |- s
+    |    |    |    |- 4
+}}}

@@ -1,0 +1,23 @@
+#summary compare with standard shelve.
+
+{{{
+huahua@huahua:tmp$ python
+Python 2.5.1 (r251:54863, May  2 2007, 16:56:35) 
+[GCC 4.1.2 (Ubuntu 4.1.2-0ubuntu4)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import zshelve
+>>> import shelve
+>>> zdb = zshelve.btopen('/tmp/zshelve.db')
+>>> db  =  shelve.open  ('/tmp/shelve.db')
+>>> zdb['a'] = ['0123456789'*10000000]
+>>> db['a']  = ['0123456789'*10000000]
+>>> zdb.sync()
+>>> db.sync()
+}}}
+
+
+{{{
+huahua@huahua:tmp$ ls -lh  /tmp/*shelve.db
+-rw-r--r-- 1 huahua huahua  96M 2007-11-09 16:11 /tmp/shelve.db
+-rw-r--r-- 1 huahua huahua 536K 2007-11-09 16:11 /tmp/zshelve.db
+}}}

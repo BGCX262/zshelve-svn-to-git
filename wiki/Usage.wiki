@@ -1,0 +1,29 @@
+
+= In program =
+{{{
+huahua@huahua:zshelve$ python
+Python 2.5.1 (r251:54863, May  2 2007, 16:56:35) 
+[GCC 4.1.2 (Ubuntu 4.1.2-0ubuntu4)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import zshelve
+>>> db = zshelve.btopen('/tmp/tes.db')
+>>> db['a'] = '0123456789'*1000000
+>>> db['b'] = range(1000000)
+>>> 'a' in db
+True
+>>> 'd' in db
+False
+>>> del db['a']
+>>> db.keys()
+['b']
+>>> str1 = db['a']
+>>> str1[:50]
+'01234567890123456789012345678901234567890123456789'
+>>> db.sync()
+>>> 
+}}}
+
+
+= In commandline =
+
+See [commandline]
